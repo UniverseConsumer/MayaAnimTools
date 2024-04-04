@@ -35,11 +35,18 @@ class CreateLimbControllerWidget(QWidget):
         self.masterlayout.addWidget(self.autoFindJntDisplay)
         self.adjustSize()
 
+        rigLimbBtn = QPushButton("Rig Limb")
+        rigLimbBtn.clicked.connect(self.RigLimbBtnClicked)
+        self.masterlayout.addWidget(rigLimbBtn)
+
         self.createLimbCtrl = CreateLimbControl()
 
     def FindJntBtnClicked(self):
         self.createLimbCtrl.FindJntBasedOnRootSel()
         self.autoFindJntDisplay.setText(f"{self.createLimbCtrl.root},{self.createLimbCtrl.mid},{self.createLimbCtrl.end}")
+
+    def RigLimbBtnClicked(self):
+        self.createLimbCtrl.RigLimb()
 
 
 ControllerWidget = CreateLimbControllerWidget()
