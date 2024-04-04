@@ -5,9 +5,9 @@ from PySide2.QtWidgets import QWidget,QLabel, QVBoxLayout, QPushButton
 
 def CreateCircleController(jnt, size):
     name = "ac_" + jnt
-    mc.circle(n = name, nr={1,0,0}, r = size/2)
+    mc.circle(n = name, nr=(1,0,0), r = size/2)
     ctrlGrpName = name +"_GRP"
-    mc.group(name, ctrlGrpName)
+    mc.group(name, n=ctrlGrpName)
     mc.matchTransform(ctrlGrpName, jnt)
     mc.orientConstraint(name, jnt)
 
@@ -23,7 +23,7 @@ class CreateLimbControl:
 
     def FindJntBasedOnRootSel(self):
         self.root = mc.ls(sl=True, type = "joint") [0]
-        self.mid - mc.listRelatives(self.root, c=True, type="joint") [0]
+        self.mid = mc.listRelatives(self.root, c=True, type="joint") [0]
         self.end = mc.listRelatives(self.mid, c=True, type="joint")[0]
 
     def RigLimb(self):
