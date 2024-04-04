@@ -3,6 +3,17 @@ import maya.cmds as mc
 
 from PySide2.QtWidgets import QWidget,QLabel, QVBoxLayout, QPushButton
 
+def CreateCircleController(jnt, size):
+    name = "ac_" + jnt
+    mc.circle(n = name, nr={1,0,0}, r = size/2)
+    ctrlGrpName = name +"_GRP"
+    mc.group(name, ctrlGrpName)
+    mc.matchTransform(ctrlGrpName, jnt)
+    mc.orientConstraint(name, jnt)
+
+    return name, ctrlGrpName
+
+
 
 class CreateLimbControl:
     def __init__(self):
@@ -14,6 +25,14 @@ class CreateLimbControl:
         self.root = mc.ls(sl=True, type = "joint") [0]
         self.mid - mc.listRelatives(self.root, c=True, type="joint") [0]
         self.end = mc.listRelatives(self.mid, c=True, type="joint")[0]
+
+    def RigLimb(self):
+        rootCtrl, rootCtrlGrp = CreateCircleController(self.root, 20)
+        midCtrl, midCtrlGrp = CreateCircleController(self.mid, 20)
+        endCtrl, endCtrlGrp = CreateCircleController(self.end, 20)
+
+        mc.parent(midCtrlGrp, rootCtrl)
+        mc.parent(endCtrlGrp, midCtrl)
 
 class CreateLimbControllerWidget(QWidget):
     def __init__(self):
