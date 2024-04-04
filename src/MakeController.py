@@ -4,7 +4,18 @@ import maya.cmds as mc
 from PySide2.QtWidgets import QWidget,QLabel, QVBoxLayout, QPushButton
 
 
-class CreateControllerWidget(QWidget):
+class CreateLimbControl:
+    def __init__(self):
+        self.root = ""
+        self.mid = ""
+        self.end = ""
+
+    def FindJntBasedOnRootSel(self):
+        self.root = mc.ls(sl=True, type = "joint") [0]
+        self.mid - mc.listRelatives(self.root, c=True, type="joint") [0]
+        self.end = mc.listRelatives(self.end, c=True, type="joint")[0]
+
+class CreateLimbControllerWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Create IkFk Limnb")
@@ -25,5 +36,5 @@ class CreateControllerWidget(QWidget):
             print ("I am clicked.")
 
 
-ControllerWidget = CreateControllerWidget()
+ControllerWidget = CreateLimbControllerWidget()
 ControllerWidget.show()
