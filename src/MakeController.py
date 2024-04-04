@@ -3,6 +3,12 @@ import maya.cmds as mc
 
 from PySide2.QtWidgets import QWidget,QLabel, QVBoxLayout, QPushButton
 
+def CreateBox(name, size):
+    pntPositions = ((-0.5,0.5,0.5), (0.5,0.5,0.5), (0.5,0.5,-0.5), (-0.5, 0.5, -0.5), (-0.5, 0.5, 0.5), (-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (0.5, 0.5, 0.5), (0.5, -0.5, 0.5), (0.5, -0.5, -0.5), (0.5, 0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (-0.5, -0.5, -0.5), (-0.5, -0.5, 0.5))
+    mc.curve(n = name, p = pntPositions)
+    mc.setAttr(name + ".scale", size, size, size, type = "float3")
+    mc.makeIdentity(name, a = True) #Freeze Transformation
+
 def CreateCircleController(jnt, size):
     name = "ac_" + jnt
     mc.circle(n = name, nr=(1,0,0), r = size/2)
@@ -33,6 +39,13 @@ class CreateLimbControl:
 
         mc.parent(midCtrlGrp, rootCtrl)
         mc.parent(endCtrlGrp, midCtrl)
+
+        ikEndCtrl = "ac_ik_" + self.end
+        CreateBox(ikEndCtrl, 10)
+        ikEndCtrlGrp = ikEndCtrl + "_GRP"
+        mc.group(ikEndCtrl, n = ikEndCtrlGrp)
+        mc.matchTransform(ikEndCtrlGrp, self.end)
+        mc.orientConstraint(ikEndCtrl, self.end)
 
 class CreateLimbControllerWidget(QWidget):
     def __init__(self):
