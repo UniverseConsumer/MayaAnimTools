@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QWidget,QLabel, QVBoxLayout, QPushButton
 
 def CreateBox(name, size):
     pntPositions = ((-0.5,0.5,0.5), (0.5,0.5,0.5), (0.5,0.5,-0.5), (-0.5, 0.5, -0.5), (-0.5, 0.5, 0.5), (-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (0.5, 0.5, 0.5), (0.5, -0.5, 0.5), (0.5, -0.5, -0.5), (0.5, 0.5, -0.5), (0.5, -0.5, -0.5), (-0.5, -0.5, -0.5), (-0.5, 0.5, -0.5), (-0.5, -0.5, -0.5), (-0.5, -0.5, 0.5))
-    mc.curve(n = name, p = pntPositions)
+    mc.curve(n = name, d=1, p = pntPositions)
     mc.setAttr(name + ".scale", size, size, size, type = "float3")
     mc.makeIdentity(name, a = True) #Freeze Transformation
 
@@ -46,6 +46,9 @@ class CreateLimbControl:
         mc.group(ikEndCtrl, n = ikEndCtrlGrp)
         mc.matchTransform(ikEndCtrlGrp, self.end)
         mc.orientConstraint(ikEndCtrl, self.end)
+
+        ikHandleName = "ikHandle_" + self.end
+        mc.ikHandle(n=ikHandleName, sj = self.root, ee = self.end, sol="ikRPSolver")
 
 class CreateLimbControllerWidget(QWidget):
     def __init__(self):
